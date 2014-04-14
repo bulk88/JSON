@@ -334,7 +334,11 @@ sub _set_module {
     push @JSON::ISA, $module;
     if ( JSON->is_xs and JSON->backend->VERSION < 3 ) {
         eval 'package JSON::PP::Boolean';
-        push @{"$module\::Boolean::ISA"}, qw(JSON::PP::Boolean);
+        if($module eq "Cpanel::JSON::XS") {
+            push @{"JSON::XS::Boolean::ISA"}, qw(JSON::PP::Boolean);
+        } else {
+            push @{"$module\::Boolean::ISA"}, qw(JSON::PP::Boolean);
+        }
     }
 
     *{"JSON::is_bool"} = \&{"$module\::is_bool"};
